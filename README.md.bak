@@ -1,0 +1,2 @@
+# interview-scorecard
+A role-based interview scorecard tool. Define custom roles with their own question banks, run structured interviews with a live Excellent/Good/Average/Bad rating system, and get an auto-calculated score (out of 10) with hire recommendations. Stores candidates, roles, and questionnaires in a database for full interview history across your hiring.
