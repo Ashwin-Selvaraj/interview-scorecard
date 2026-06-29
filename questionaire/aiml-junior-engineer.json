@@ -1,0 +1,242 @@
+[
+    {
+      "round": "Round 1 — Core ML Fundamentals",
+      "question": "What is the difference between supervised, unsupervised, and reinforcement learning?",
+      "purpose": "Foundation check",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 1 — Core ML Fundamentals",
+      "question": "What is overfitting, and how would you detect and reduce it?",
+      "purpose": "Model quality awareness",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 1 — Core ML Fundamentals",
+      "question": "How do you split data into train, validation, and test sets? Why do we need all three?",
+      "purpose": "Evaluation basics",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 1 — Core ML Fundamentals",
+      "question": "What is the difference between precision, recall, and F1-score? When would you prioritize one over another?",
+      "purpose": "Classification understanding",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 1 — Core ML Fundamentals",
+      "question": "What is a confusion matrix? Walk me through what each cell represents.",
+      "purpose": "Model evaluation literacy",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 1 — Core ML Fundamentals",
+      "question": "Have you used any LLM API before (OpenAI, Gemini, Claude, etc.)? Describe a project or experiment.",
+      "purpose": "Immediate productivity signal — we need someone who can ship LLM features in 30–60 days",
+      "metaTag": "top priority"
+    },
+    {
+      "round": "Round 1 — Core ML Fundamentals",
+      "question": "How would you reduce the cost of calling an AI API in a production app? Name at least 2 strategies.",
+      "purpose": "Startup-relevant cost awareness",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 2 — Data Handling & Practical ML",
+      "question": "30% of your user data is missing. How do you handle it, and what are the tradeoffs of each approach?",
+      "purpose": "Real-world data quality — relevant to Circle of Life and Whistling Citizen",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 2 — Data Handling & Practical ML",
+      "question": "When would you use accuracy vs. precision/recall/F1 in a real production system?",
+      "purpose": "Tests whether they understand metric choice in context — Whistling Citizen classification, TheMemeTV spam detection",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 2 — Data Handling & Practical ML",
+      "question": "How would you handle incorrect or noisy user-submitted labels in a training dataset?",
+      "purpose": "Practical data quality — Whistling Citizen civic reports, any crowdsourced labeling pipeline",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 3 — NLP & LLM / Prompt Engineering",
+      "question": "What is prompt engineering? Give an example of a bad prompt and how you'd improve it — use a crypto market assistant as the example.",
+      "purpose": "Tests baseline LLM literacy — TheMemeTV, CoinDiary",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 3 — NLP & LLM / Prompt Engineering",
+      "question": "How would you build an AI assistant that generates live commentary on a crypto token chart every 30 seconds?",
+      "purpose": "Core TheMemeTV feature — fastest path to a shippable feature; tests prompt design + data ingestion thinking",
+      "metaTag": "TheMemeTV — top priority"
+    },
+    {
+      "round": "Round 3 — NLP & LLM / Prompt Engineering",
+      "question": "How would you prevent the AI from generating repetitive commentary across multiple calls in the same session?",
+      "purpose": "TheMemeTV UX quality — tests whether they think about context window, deduplication, similarity checking",
+      "metaTag": "TheMemeTV"
+    },
+    {
+      "round": "Round 3 — NLP & LLM / Prompt Engineering",
+      "question": "What happens if the live price feed is delayed or missing? How does your AI commentary system degrade gracefully?",
+      "purpose": "Production reliability thinking — TheMemeTV; tests edge-case handling not just happy-path",
+      "metaTag": "TheMemeTV"
+    },
+    {
+      "round": "Round 3 — NLP & LLM / Prompt Engineering",
+      "question": "How would you detect toxic or spam comments in a live chat stream?",
+      "purpose": "Tests NLP/classification approach — TheMemeTV live chat, CoinDiary social feed",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 3 — NLP & LLM / Prompt Engineering",
+      "question": "How would you extract location and issue type from a free-text civic complaint submitted by a user?",
+      "purpose": "Named entity extraction / structured output — core Whistling Citizen pipeline",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 4A — TheMemeTV: AI Chart Commentary Engine",
+      "question": "How would you generate live commentary from token price and volume data every 30 seconds? What would your prompt look like?",
+      "purpose": "Core TheMemeTV feature build — tests end-to-end thinking from data ingestion to LLM output",
+      "metaTag": "TheMemeTV — top priority"
+    },
+    {
+      "round": "Round 4A — TheMemeTV: AI Chart Commentary Engine",
+      "question": "What inputs would you feed the LLM to make the commentary sound like a 'degen crypto trader'? How do you style the persona in the prompt?",
+      "purpose": "Tests prompt persona design and tone control — key for TheMemeTV product feel",
+      "metaTag": "TheMemeTV"
+    },
+    {
+      "round": "Round 4A — TheMemeTV: AI Chart Commentary Engine",
+      "question": "How would you cache previous commentary outputs to reduce repeated API cost on a chart that updates every 30 seconds?",
+      "purpose": "Cost optimisation + repetition avoidance — startup-critical for API spend",
+      "metaTag": "TheMemeTV"
+    },
+    {
+      "round": "Round 4A — TheMemeTV: AI Chart Commentary Engine",
+      "question": "How would you implement different commentary 'modes' — e.g. bullish, bearish, meme mode — switchable by the user?",
+      "purpose": "Product feature design thinking — tests ability to extend a system cleanly",
+      "metaTag": "TheMemeTV"
+    },
+    {
+      "round": "Round 4B — Whistling Citizen: Civic Issue Classification",
+      "question": "A user uploads a photo of a pothole. How would you automatically classify it as a civic issue and route it to the right department?",
+      "purpose": "Core Whistling Citizen pipeline — image classification + routing logic",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 4B — Whistling Citizen: Civic Issue Classification",
+      "question": "What pre-trained model would you use for civic image classification (e.g. MobileNet, EfficientNet) and why?",
+      "purpose": "Tests practical model selection for resource-constrained mobile use cases",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 4B — Whistling Citizen: Civic Issue Classification",
+      "question": "How would you extract issue type and location from a free-text complaint submitted alongside the photo?",
+      "purpose": "NLP extraction — duplicate of Round 3 Q16 but asked in product context to see applied thinking",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 4B — Whistling Citizen: Civic Issue Classification",
+      "question": "How would you improve model accuracy over time using real user feedback and confirmed/corrected reports?",
+      "purpose": "Tests continuous learning mindset — human-in-the-loop retraining pipeline",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 4C — Circle of Life: Personalized Insights",
+      "question": "How would you generate personalized life insights from a user's health, habits, and activity data?",
+      "purpose": "Core Circle of Life feature — tests personalization + LLM prompt design for sensitive data",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 4C — Circle of Life: Personalized Insights",
+      "question": "What privacy concerns would you flag when using personal data for AI-generated insights, and how would you address them?",
+      "purpose": "Red flag detector — a good candidate should independently raise anonymization, consent, and data minimization without prompting",
+      "metaTag": "🚩 red flag if they say 'just send it to the API'"
+    },
+    {
+      "round": "Round 4C — Circle of Life: Personalized Insights",
+      "question": "How do you separate factual analysis from speculative predictions in AI output? How would you label uncertainty to the user?",
+      "purpose": "Tests product responsibility thinking — important for health/life data context",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 4C — Circle of Life: Personalized Insights",
+      "question": "How would you build a recommendation engine for services or content without sending raw user data to an external model or third party?",
+      "purpose": "Privacy-by-design thinking — on-device inference, anonymized embeddings, federated approaches",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 4D — CoinDiary: Social & Quest Intelligence",
+      "question": "How would you detect spam or bot activity in a social feed where users post crypto commentary?",
+      "purpose": "Spam/bot detection — tests classification + heuristic thinking for CoinDiary social layer",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 4D — CoinDiary: Social & Quest Intelligence",
+      "question": "How would you recommend quests or challenges that a specific user is likely to complete?",
+      "purpose": "Recommendation system thinking — core to CoinDiary/Quest platform engagement loop",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 4D — CoinDiary: Social & Quest Intelligence",
+      "question": "What features would you use to rank a social feed for a given user? Walk through your feature engineering approach.",
+      "purpose": "Feed ranking / feature engineering — tests understanding of engagement signals",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 4E — Fantasy/Quest Platform: Prediction & Engagement",
+      "question": "How would you predict which users are likely to join an upcoming tournament?",
+      "purpose": "Participation prediction — tests propensity modelling for the quest/fantasy platform",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 4E — Fantasy/Quest Platform: Prediction & Engagement",
+      "question": "How would you detect suspicious or automated gameplay behavior in a competitive platform?",
+      "purpose": "Fraud/bot detection — tests anomaly detection and rule-based vs. ML hybrid thinking",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 4E — Fantasy/Quest Platform: Prediction & Engagement",
+      "question": "How would you build a simple churn prediction model, and what metrics or signals would you monitor after deploying it?",
+      "purpose": "Retention modelling + MLOps basics — tests end-to-end thinking from feature to monitoring",
+      "metaTag": ""
+    },
+    {
+      "round": "Round 4F — Vibesterz: On-Device / WebGPU AI",
+      "question": "How would you run LLM inference entirely inside a browser tab using WebGPU/WASM? What constraints are different from server-side inference?",
+      "purpose": "On-device AI — only ask if Vibesterz is active on the roadmap",
+      "metaTag": "only if Vibesterz is active"
+    },
+    {
+      "round": "Round 4F — Vibesterz: On-Device / WebGPU AI",
+      "question": "With only a small on-device model, how would you compensate for weaker reasoning using a multi-pass pipeline (search → plan → generate → verify → polish)?",
+      "purpose": "Tests creative thinking around small-model limitations — agentic pipeline design",
+      "metaTag": "only if Vibesterz is active"
+    },
+    {
+      "round": "Round 4F — Vibesterz: On-Device / WebGPU AI",
+      "question": "WebLLM/Transformers.js vs. a local Ollama setup — what are the tradeoffs for a zero-install web product?",
+      "purpose": "Tooling decision-making — tests awareness of in-browser vs. local inference tradeoffs",
+      "metaTag": "only if Vibesterz is active"
+    },
+    {
+      "round": "Round 5 — Deployment & MLOps",
+      "question": "You trained a model in Python. How would you expose it as an API to a mobile app or NestJS backend? Walk through the stack (FastAPI/Flask, Docker, serialization).",
+      "purpose": "Integration with our existing NestJS/Kotlin/web stack — tests whether they can actually ship, not just train in a notebook",
+      "metaTag": "top priority"
+    },
+    {
+      "round": "Round 5 — Deployment & MLOps",
+      "question": "What would you monitor after deploying a model to production? Name at least 4 signals.",
+      "purpose": "Production reliability awareness — latency, error rate, drift, usage cost",
+      "metaTag": ""
+    },
+    {
+      "round": "Live Coding Task",
+      "question": "Given: token price +8%, volume +35%, previous commentary = 'Bulls are gaining momentum'. Write a Python function that calls an LLM API to generate new market commentary that is NOT repetitive relative to the previous line. Handle missing data and API failure gracefully.",
+      "purpose": "The 3-in-1 deciding test: prompt construction quality, clean Python + API integration, edge-case handling, and creativity in repetition-avoidance",
+      "metaTag": "TheMemeTV — top priority | 30–45 min"
+    }
+  ]
