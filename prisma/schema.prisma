@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  rounds      Round[]
+  candidates  Candidate[]
+  interviews  Interview[]
+
+  @@map("roles")
+}
+
+model Round {
+  id         String     @id @default(cuid())
+  roleId     String     @map("role_id")
+  title      String
+  orderIndex Int        @map("order_index")
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  questions  Question[]
+
+  @@map("rounds")
+}
+
+model Question {
+  id         String   @id @default(cuid())
+  roundId    String   @map("round_id")
+  text       String
+  metaTag    String?  @map("meta_tag")
+  orderIndex Int      @map("order_index")
+  isArchived Boolean  @default(false) @map("is_archived")
+
+  round      Round    @relation(fields: [roundId], references: [id], onDelete: Cascade)
+  answers    Answer[]
+
+  @@map("questions")
+}
+
+model Candidate {
+  id        String      @id @default(cuid())
+  name      String
+  roleId    String      @map("role_id")
+  createdAt DateTime    @default(now()) @map("created_at")
+
+  role       Role       @relation(fields: [roleId], references: [id])
+  interviews Interview[]
+
+  @@map("candidates")
+}
+
+enum InterviewStatus {
+  in_progress
+  completed
+}
+
+enum Rating {
+  excellent
+  good
+  average
+  bad
+}
+
+model Interview {
+  id          String          @id @default(cuid())
+  candidateId String          @map("candidate_id")
+  roleId      String          @map("role_id")
+  startedAt   DateTime        @default(now()) @map("started_at")
+  completedAt DateTime?       @map("completed_at")
+  finalScore  Float?          @map("final_score")
+  status      InterviewStatus @default(in_progress)
+
+  candidate   Candidate       @relation(fields: [candidateId], references: [id])
+  role        Role            @relation(fields: [roleId], references: [id])
+  answers     Answer[]
+
+  @@map("interviews")
+}
+
+model Answer {
+  id          String    @id @default(cuid())
+  interviewId String    @map("interview_id")
+  questionId  String    @map("question_id")
+  rating      Rating?
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  interview   Interview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+  question    Question  @relation(fields: [questionId], references: [id])
+
+  @@unique([interviewId, questionId])
+  @@map("answers")
+}
