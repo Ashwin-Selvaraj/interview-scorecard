@@ -36,6 +36,7 @@ model Question {
   id         String   @id @default(cuid())
   roundId    String   @map("round_id")
   text       String
+  purpose    String?
   metaTag    String?  @map("meta_tag")
   orderIndex Int      @map("order_index")
   isArchived Boolean  @default(false) @map("is_archived")

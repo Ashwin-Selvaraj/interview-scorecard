@@ -9,6 +9,7 @@ type Rating = "excellent" | "good" | "average" | "bad" | null;
 interface Question {
   id: string;
   text: string;
+  purpose: string | null;
   metaTag: string | null;
   orderIndex: number;
 }
@@ -187,11 +188,18 @@ export default function InterviewPage({ params }: { params: Promise<{ id: string
                         <span className="text-xs text-[#484f58] mt-0.5 shrink-0">Q{qi + 1}</span>
                         <div className="flex-1">
                           <p className="text-[#c9d1d9] text-sm leading-relaxed">{q.text}</p>
-                          {q.metaTag && (
-                            <span className="mt-1.5 inline-block text-xs bg-[#21262d] text-amber-300 border border-amber-800 rounded-full px-2 py-0.5">
-                              {q.metaTag}
-                            </span>
-                          )}
+                          <div className="flex flex-wrap gap-1.5 mt-1.5">
+                            {q.metaTag && (
+                              <span className="text-xs bg-[#21262d] text-amber-300 border border-amber-800 rounded-full px-2 py-0.5">
+                                {q.metaTag}
+                              </span>
+                            )}
+                            {q.purpose && (
+                              <span className="text-xs bg-[#21262d] text-purple-300 border border-purple-900 rounded-full px-2 py-0.5">
+                                {q.purpose}
+                              </span>
+                            )}
+                          </div>
                         </div>
                         {ratings[q.id] && (
                           <span className="text-xs text-[#484f58] shrink-0">

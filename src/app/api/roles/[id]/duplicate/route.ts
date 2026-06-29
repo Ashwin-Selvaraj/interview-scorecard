@@ -25,6 +25,7 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
           questions: {
             create: r.questions.map((q) => ({
               text: q.text,
+              purpose: q.purpose,
               metaTag: q.metaTag,
               orderIndex: q.orderIndex,
             })),

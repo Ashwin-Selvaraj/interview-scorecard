@@ -6,6 +6,7 @@ import RoleEditor from "@/components/RoleEditor";
 interface Question {
   id: string;
   text: string;
+  purpose: string | null;
   metaTag: string | null;
   orderIndex: number;
 }
@@ -47,6 +48,7 @@ export default function EditRolePage({ params }: { params: Promise<{ id: string 
         questions: r.questions.map((q) => ({
           id: q.id,
           text: q.text,
+          purpose: q.purpose ?? "",
           metaTag: q.metaTag ?? "",
         })),
       }))}
