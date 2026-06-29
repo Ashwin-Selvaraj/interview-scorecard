@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback, use } from "react";
 import { useRouter } from "next/navigation";
 import { calcScore, getRecommendation, RATING_POINTS } from "@/lib/scoring";
+import { SkeletonRound } from "@/components/Skeleton";
+import Spinner from "@/components/Spinner";
 
 type Rating = "excellent" | "good" | "average" | "bad" | null;
 
@@ -112,8 +114,10 @@ export default function InterviewPage({ params }: { params: Promise<{ id: string
 
   if (!interview) {
     return (
-      <div className="flex items-center justify-center min-h-[calc(100vh-56px)]">
-        <div className="text-[#8b949e]">Loading interview…</div>
+      <div className="max-w-4xl mx-auto px-4 pb-20 pt-6">
+        <div className="space-y-4">
+          {Array.from({ length: 3 }).map((_, i) => <SkeletonRound key={i} />)}
+        </div>
       </div>
     );
   }
@@ -141,7 +145,7 @@ export default function InterviewPage({ params }: { params: Promise<{ id: string
               disabled={completing}
               className="bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-sm font-semibold px-4 py-1.5 rounded-lg transition-colors"
             >
-              {completing ? "Finishing…" : "Finish & Save"}
+              {completing ? <><Spinner size={14} /> Finishing…</> : "Finish & Save"}
             </button>
           </div>
         </div>
@@ -239,7 +243,7 @@ export default function InterviewPage({ params }: { params: Promise<{ id: string
           disabled={completing}
           className="bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold px-8 py-3 rounded-xl transition-colors"
         >
-          {completing ? "Finishing…" : "Finish Interview & Save →"}
+          {completing ? <><Spinner size={16} /> Finishing…</> : "Finish Interview & Save →"}
         </button>
       </div>
     </div>

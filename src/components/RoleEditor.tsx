@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Spinner from "@/components/Spinner";
 
 interface QuestionDraft {
   id?: string;
@@ -375,7 +376,7 @@ export default function RoleEditor({ initialName = "", initialDescription = "", 
               disabled={saving}
               className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold rounded-lg text-sm transition-colors"
             >
-              {saving ? "Saving…" : roleId ? "Save Changes" : "Create Role"}
+              {saving ? <span className="flex items-center gap-1.5"><Spinner size={14} /> Saving…</span> : roleId ? "Save Changes" : "Create Role"}
             </button>
           </div>
         </div>

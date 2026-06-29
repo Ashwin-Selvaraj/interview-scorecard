@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Spinner from "@/components/Spinner";
+import { SkeletonRoleCard } from "@/components/Skeleton";
 
 interface Role {
   id: string;
@@ -12,14 +14,17 @@ interface Role {
 
 export default function RolesPage() {
   const [roles, setRoles] = useState<Role[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [duplicating, setDuplicating] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
 
   useEffect(() => { loadRoles(); }, []);
 
   async function loadRoles() {
+    setIsLoading(true);
     const data = await fetch("/api/roles").then((r) => r.json());
     setRoles(data);
+    setIsLoading(false);
   }
 
   async function handleDuplicate(id: string) {
@@ -46,7 +51,11 @@ export default function RolesPage() {
         </a>
       </div>
 
-      {roles.length === 0 ? (
+      {isLoading ? (
+        <div className="space-y-3">
+          {Array.from({ length: 3 }).map((_, i) => <SkeletonRoleCard key={i} />)}
+        </div>
+      ) : roles.length === 0 ? (
         <div className="text-center py-20 text-[#8b949e]">
           <p className="mb-4">No roles yet.</p>
           <a href="/roles/new" className="text-blue-400 hover:text-blue-300">Create your first role →</a>
@@ -69,14 +78,14 @@ export default function RolesPage() {
                   disabled={duplicating === role.id}
                   className="text-xs text-[#8b949e] hover:text-white border border-[#30363d] hover:border-[#8b949e] px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
                 >
-                  {duplicating === role.id ? "…" : "Duplicate"}
+                  {duplicating === role.id ? <><Spinner size={12} className="inline" /> Duplicating</> : "Duplicate"}
                 </button>
                 <button
                   onClick={() => handleDelete(role.id, role.name)}
                   disabled={deleting === role.id}
                   className="text-xs text-red-400 hover:text-red-300 border border-red-900 hover:border-red-700 px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
                 >
-                  {deleting === role.id ? "…" : "Delete"}
+                  {deleting === role.id ? <><Spinner size={12} className="inline" /> Deleting</> : "Delete"}
                 </button>
               </div>
             </div>

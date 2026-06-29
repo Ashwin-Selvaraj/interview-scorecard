@@ -2,6 +2,7 @@
 
 import { useEffect, useState, use } from "react";
 import RoleEditor from "@/components/RoleEditor";
+import { SkeletonRound } from "@/components/Skeleton";
 
 interface Question {
   id: string;
@@ -34,7 +35,11 @@ export default function EditRolePage({ params }: { params: Promise<{ id: string 
   }, [id]);
 
   if (!role) {
-    return <div className="flex items-center justify-center min-h-[calc(100vh-56px)] text-[#8b949e]">Loading…</div>;
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-8 space-y-4">
+        {Array.from({ length: 3 }).map((_, i) => <SkeletonRound key={i} />)}
+      </div>
+    );
   }
 
   return (

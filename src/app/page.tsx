@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Spinner from "@/components/Spinner";
 
 interface Role {
   id: string;
@@ -12,19 +13,22 @@ interface Role {
 export default function HomePage() {
   const router = useRouter();
   const [roles, setRoles] = useState<Role[]>([]);
+  const [rolesLoading, setRolesLoading] = useState(true);
   const [candidateName, setCandidateName] = useState("");
   const [roleId, setRoleId] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("/api/roles").then((r) => r.json()).then(setRoles);
+    fetch("/api/roles")
+      .then((r) => r.json())
+      .then((data) => { setRoles(data); setRolesLoading(false); });
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!candidateName.trim() || !roleId) return;
-    setLoading(true);
+    setSubmitting(true);
     setError("");
     try {
       const res = await fetch("/api/interviews", {
@@ -37,7 +41,7 @@ export default function HomePage() {
       router.push(`/interviews/${interviewId}`);
     } catch {
       setError("Something went wrong. Please try again.");
-      setLoading(false);
+      setSubmitting(false);
     }
   }
 
@@ -65,17 +69,25 @@ export default function HomePage() {
 
           <div>
             <label className="block text-sm font-medium text-[#c9d1d9] mb-1.5">Role</label>
-            <select
-              value={roleId}
-              onChange={(e) => setRoleId(e.target.value)}
-              className="w-full bg-[#0d1117] border border-[#30363d] rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              required
-            >
-              <option value="">Select a role…</option>
-              {roles.map((r) => (
-                <option key={r.id} value={r.id}>{r.name}</option>
-              ))}
-            </select>
+            <div className="relative">
+              <select
+                value={roleId}
+                onChange={(e) => setRoleId(e.target.value)}
+                disabled={rolesLoading}
+                className="w-full bg-[#0d1117] border border-[#30363d] rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:opacity-60 appearance-none"
+                required
+              >
+                <option value="">{rolesLoading ? "Loading roles…" : "Select a role…"}</option>
+                {roles.map((r) => (
+                  <option key={r.id} value={r.id}>{r.name}</option>
+                ))}
+              </select>
+              {rolesLoading && (
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8b949e]">
+                  <Spinner size={14} />
+                </div>
+              )}
+            </div>
             <a href="/roles/new" className="text-xs text-blue-400 hover:text-blue-300 mt-1.5 inline-block">
               + Create new role
             </a>
@@ -85,10 +97,14 @@ export default function HomePage() {
 
           <button
             type="submit"
-            disabled={loading || !candidateName.trim() || !roleId}
-            className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-lg transition-colors"
+            disabled={submitting || rolesLoading || !candidateName.trim() || !roleId}
+            className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2"
           >
-            {loading ? "Starting…" : "Start Interview →"}
+            {submitting ? (
+              <><Spinner size={16} /> Starting…</>
+            ) : (
+              "Start Interview →"
+            )}
           </button>
         </form>
 

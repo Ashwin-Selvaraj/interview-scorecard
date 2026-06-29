@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import TopLoader from "@/components/TopLoader";
 
 export const metadata: Metadata = {
   title: "Interview Scorecard",
@@ -10,6 +11,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="h-full">
       <body className="min-h-full bg-[#0d1117] text-[#e6edf3] antialiased">
+        <TopLoader />
         <nav className="border-b border-[#21262d] bg-[#161b22] sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-14">
             <a href="/" className="font-bold text-lg text-white tracking-tight flex items-center gap-2">
