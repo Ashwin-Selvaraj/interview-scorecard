@@ -20,20 +20,30 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const { candidateName, roleId } = await req.json();
 
-  const role = await prisma.role.findUnique({
-    where: { id: roleId },
-    include: {
-      rounds: {
-        orderBy: { orderIndex: "asc" },
-        include: { questions: { where: { isArchived: false }, orderBy: { orderIndex: "asc" } } },
+  const [role, commonRounds] = await Promise.all([
+    prisma.role.findUnique({
+      where: { id: roleId },
+      include: {
+        rounds: {
+          orderBy: { orderIndex: "asc" },
+          include: { questions: { where: { isArchived: false }, orderBy: { orderIndex: "asc" } } },
+        },
       },
-    },
-  });
+    }),
+    prisma.round.findMany({
+      where: { isCommon: true },
+      orderBy: { orderIndex: "asc" },
+      include: { questions: { where: { isArchived: false }, orderBy: { orderIndex: "asc" } } },
+    }),
+  ]);
   if (!role) return NextResponse.json({ error: "Role not found" }, { status: 404 });
 
   const candidate = await prisma.candidate.create({ data: { name: candidateName, roleId } });
 
-  const allQuestions = role.rounds.flatMap((r) => r.questions);
+  const allQuestions = [
+    ...role.rounds.flatMap((r) => r.questions),
+    ...commonRounds.flatMap((r) => r.questions),
+  ];
   const interview = await prisma.interview.create({
     data: {
       candidateId: candidate.id,

@@ -22,11 +22,12 @@ model Role {
 
 model Round {
   id         String     @id @default(cuid())
-  roleId     String     @map("role_id")
+  roleId     String?    @map("role_id")
   title      String
   orderIndex Int        @map("order_index")
+  isCommon   Boolean    @default(false) @map("is_common")
 
-  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  role       Role?      @relation(fields: [roleId], references: [id], onDelete: Cascade)
   questions  Question[]
 
   @@map("rounds")
