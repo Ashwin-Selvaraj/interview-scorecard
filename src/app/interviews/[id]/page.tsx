@@ -197,6 +197,7 @@ export default function InterviewPage({ params }: { params: Promise<{ id: string
   const [ratings, setRatings] = useState<Record<string, Rating>>({});
   const [collapsedRounds, setCollapsedRounds] = useState<Set<string>>(new Set());
   const [completing, setCompleting] = useState(false);
+  const [completeError, setCompleteError] = useState<string | null>(null);
   const [savingQueue, setSavingQueue] = useState<Set<string>>(new Set());
   const [showFormula, setShowFormula] = useState(false);
 
@@ -252,8 +253,18 @@ export default function InterviewPage({ params }: { params: Promise<{ id: string
 
   async function handleComplete() {
     setCompleting(true);
-    await fetch(`/api/interviews/${id}/complete`, { method: "POST" });
-    router.push("/interviews");
+    setCompleteError(null);
+    try {
+      const res = await fetch(`/api/interviews/${id}/complete`, { method: "POST" });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error ?? `Server error ${res.status}`);
+      }
+      router.push("/interviews");
+    } catch (err) {
+      setCompleteError(err instanceof Error ? err.message : "Failed to complete interview");
+      setCompleting(false);
+    }
   }
 
   function toggleRound(roundId: string) {
@@ -289,6 +300,11 @@ export default function InterviewPage({ params }: { params: Promise<{ id: string
           </div>
           <div className="flex items-center gap-3">
             {savingQueue.size > 0 && <span className="text-xs text-[#8b949e]">Saving…</span>}
+            {completeError && (
+              <span className="text-xs text-red-400 max-w-xs truncate" title={completeError}>
+                ⚠ {completeError}
+              </span>
+            )}
             {currentScore !== null && (
               <div className="flex items-center gap-1">
                 <div className={`px-3 py-1.5 rounded-full border text-sm font-bold ${rec ? SCORE_COLOR[rec.color] : ""}`}>
