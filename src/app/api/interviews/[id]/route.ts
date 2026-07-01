@@ -28,7 +28,22 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     }),
   ]);
   if (!interview) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  return NextResponse.json({ ...interview, commonRounds });
+
+  // Count how many times each question has been rated (across all interviews)
+  const allQuestionIds = [
+    ...interview.role.rounds.flatMap((r) => r.questions.map((q) => q.id)),
+    ...commonRounds.flatMap((r) => r.questions.map((q) => q.id)),
+  ];
+  const usageCounts = await prisma.answer.groupBy({
+    by: ["questionId"],
+    where: { questionId: { in: allQuestionIds }, rating: { not: null } },
+    _count: { questionId: true },
+  });
+  const questionUsage: Record<string, number> = Object.fromEntries(
+    usageCounts.map((u) => [u.questionId, u._count.questionId])
+  );
+
+  return NextResponse.json({ ...interview, commonRounds, questionUsage });
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {

@@ -11,12 +11,13 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const { title, questions = [] } = await req.json();
+  const { title, questions = [], weight = 1.0 } = await req.json();
   const maxOrder = await prisma.round.aggregate({ where: { isCommon: true }, _max: { orderIndex: true } });
   const round = await prisma.round.create({
     data: {
       title,
       isCommon: true,
+      weight,
       orderIndex: (maxOrder._max.orderIndex ?? -1) + 1,
       questions: {
         create: (questions as { text: string; purpose?: string; metaTag?: string }[]).map((q, i) => ({

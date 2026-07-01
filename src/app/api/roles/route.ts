@@ -21,8 +21,9 @@ export async function POST(req: NextRequest) {
       description: description ?? null,
       rounds: {
         create: (rounds ?? []).map(
-          (r: { title: string; questions: { text: string; metaTag?: string; purpose?: string }[] }, rIdx: number) => ({
+          (r: { title: string; weight?: number; questions: { text: string; metaTag?: string; purpose?: string }[] }, rIdx: number) => ({
             title: r.title,
+            weight: r.weight ?? 1.0,
             orderIndex: rIdx,
             questions: {
               create: r.questions.map((q, qIdx) => ({

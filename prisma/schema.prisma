@@ -26,6 +26,7 @@ model Round {
   title      String
   orderIndex Int        @map("order_index")
   isCommon   Boolean    @default(false) @map("is_common")
+  weight     Float      @default(1.0)
 
   role       Role?      @relation(fields: [roleId], references: [id], onDelete: Cascade)
   questions  Question[]

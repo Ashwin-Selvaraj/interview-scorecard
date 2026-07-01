@@ -56,9 +56,9 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     const r = rounds[rIdx];
     let round;
     if (r.id) {
-      round = await prisma.round.update({ where: { id: r.id }, data: { title: r.title, orderIndex: rIdx } });
+      round = await prisma.round.update({ where: { id: r.id }, data: { title: r.title, weight: r.weight ?? 1.0, orderIndex: rIdx } });
     } else {
-      round = await prisma.round.create({ data: { roleId: id, title: r.title, orderIndex: rIdx } });
+      round = await prisma.round.create({ data: { roleId: id, title: r.title, weight: r.weight ?? 1.0, orderIndex: rIdx } });
     }
     for (let qIdx = 0; qIdx < (r.questions ?? []).length; qIdx++) {
       const q = r.questions[qIdx];

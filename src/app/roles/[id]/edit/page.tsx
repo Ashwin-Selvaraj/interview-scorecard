@@ -50,6 +50,7 @@ export default function EditRolePage({ params }: { params: Promise<{ id: string 
       initialRounds={role.rounds.map((r) => ({
         id: r.id,
         title: r.title,
+        weight: (r as { weight?: number }).weight ?? 1.0,
         questions: r.questions.map((q) => ({
           id: q.id,
           text: q.text,

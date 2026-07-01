@@ -2,9 +2,64 @@
 
 import { useState, useEffect, useCallback, use } from "react";
 import { useRouter } from "next/navigation";
-import { calcScore, getRecommendation, RATING_POINTS } from "@/lib/scoring";
+import { calcScoreFromRounds, getRecommendation, RATING_POINTS } from "@/lib/scoring";
 import { SkeletonRound } from "@/components/Skeleton";
 import Spinner from "@/components/Spinner";
+
+function ScoringModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60" onClick={onClose}>
+      <div
+        className="bg-[#161b22] border border-[#21262d] rounded-xl max-w-md w-full p-6 shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-white font-semibold text-base">Scoring Formula</h2>
+          <button onClick={onClose} className="text-[#8b949e] hover:text-white text-lg leading-none">✕</button>
+        </div>
+        <div className="space-y-4 text-sm text-[#c9d1d9]">
+          <div>
+            <p className="text-[#8b949e] font-medium uppercase text-xs tracking-wider mb-1">Rating Points</p>
+            <div className="grid grid-cols-2 gap-1">
+              {Object.entries(RATING_POINTS).map(([r, pts]) => (
+                <div key={r} className="flex justify-between bg-[#0d1117] rounded px-2 py-1">
+                  <span className="capitalize">{r}</span>
+                  <span className="text-amber-300 font-mono">{pts} pts</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <p className="text-[#8b949e] font-medium uppercase text-xs tracking-wider mb-1">Per-Round Score</p>
+            <p className="text-[#8b949e]">Average points of rated questions in that round</p>
+          </div>
+          <div>
+            <p className="text-[#8b949e] font-medium uppercase text-xs tracking-wider mb-1">Weighted Score</p>
+            <p className="font-mono text-xs bg-[#0d1117] rounded px-2 py-2 leading-relaxed">
+              Σ(round_mean × weight) / Σ(weights)
+            </p>
+            <p className="text-[#8b949e] mt-1">Rounds with higher weight influence the score more.</p>
+          </div>
+          <div>
+            <p className="text-[#8b949e] font-medium uppercase text-xs tracking-wider mb-1">Completion Penalty</p>
+            <p className="font-mono text-xs bg-[#0d1117] rounded px-2 py-2 leading-relaxed">
+              factor = min(1, rated / total / 0.5)
+            </p>
+            <p className="text-[#8b949e] mt-1">
+              Below 50% completion → score is scaled down linearly.
+              At ≥50% answered → no penalty.
+            </p>
+          </div>
+          <div className="border-t border-[#21262d] pt-3">
+            <p className="font-mono text-xs bg-[#0d1117] rounded px-2 py-2">
+              final = weighted_score × completion_factor
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 type Rating = "excellent" | "good" | "average" | "bad" | null;
 
@@ -20,6 +75,7 @@ interface Round {
   id: string;
   title: string;
   orderIndex: number;
+  weight: number;
   questions: Question[];
 }
 
@@ -31,6 +87,7 @@ interface Interview {
   answers: { questionId: string; rating: Rating }[];
   finalScore: number | null;
   commonRounds: Round[];
+  questionUsage: Record<string, number>;
 }
 
 const RATING_CONFIG = {
@@ -53,12 +110,14 @@ function RoundBlock({
   collapsedRounds,
   toggleRound,
   handleRating,
+  questionUsage,
 }: {
   round: Round;
   ratings: Record<string, Rating>;
   collapsedRounds: Set<string>;
   toggleRound: (id: string) => void;
   handleRating: (questionId: string, rating: keyof typeof RATING_CONFIG) => void;
+  questionUsage: Record<string, number>;
 }) {
   const collapsed = collapsedRounds.has(round.id);
   const roundRated = round.questions.filter((q) => ratings[q.id] != null).length;
@@ -92,6 +151,11 @@ function RoundBlock({
                     {q.purpose && (
                       <span className="text-xs bg-[#21262d] text-purple-300 border border-purple-900 rounded-full px-2 py-0.5">
                         {q.purpose}
+                      </span>
+                    )}
+                    {(questionUsage[q.id] ?? 0) > 0 && (
+                      <span className="text-xs bg-[#21262d] text-[#8b949e] border border-[#30363d] rounded-full px-2 py-0.5">
+                        asked {questionUsage[q.id]}×
                       </span>
                     )}
                   </div>
@@ -134,6 +198,7 @@ export default function InterviewPage({ params }: { params: Promise<{ id: string
   const [collapsedRounds, setCollapsedRounds] = useState<Set<string>>(new Set());
   const [completing, setCompleting] = useState(false);
   const [savingQueue, setSavingQueue] = useState<Set<string>>(new Set());
+  const [showFormula, setShowFormula] = useState(false);
 
   useEffect(() => {
     fetch(`/api/interviews/${id}`)
@@ -146,7 +211,13 @@ export default function InterviewPage({ params }: { params: Promise<{ id: string
       });
   }, [id]);
 
-  const currentScore = calcScore(Object.values(ratings));
+  const allRoundsForScoring = interview
+    ? [...interview.role.rounds, ...interview.commonRounds].map((r) => ({
+        weight: r.weight,
+        questionIds: r.questions.map((q) => q.id),
+      }))
+    : [];
+  const currentScore = calcScoreFromRounds(allRoundsForScoring, ratings);
   const rec = getRecommendation(currentScore);
 
   const allQuestions = [
@@ -208,6 +279,7 @@ export default function InterviewPage({ params }: { params: Promise<{ id: string
 
   return (
     <div className="max-w-4xl mx-auto px-4 pb-20">
+      {showFormula && <ScoringModal onClose={() => setShowFormula(false)} />}
       {/* Sticky header */}
       <div className="sticky top-14 z-40 bg-[#0d1117] border-b border-[#21262d] pt-4 pb-3 mb-6">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
@@ -218,8 +290,17 @@ export default function InterviewPage({ params }: { params: Promise<{ id: string
           <div className="flex items-center gap-3">
             {savingQueue.size > 0 && <span className="text-xs text-[#8b949e]">Saving…</span>}
             {currentScore !== null && (
-              <div className={`px-3 py-1.5 rounded-full border text-sm font-bold ${rec ? SCORE_COLOR[rec.color] : ""}`}>
-                {currentScore.toFixed(1)} / 10
+              <div className="flex items-center gap-1">
+                <div className={`px-3 py-1.5 rounded-full border text-sm font-bold ${rec ? SCORE_COLOR[rec.color] : ""}`}>
+                  {currentScore.toFixed(1)} / 10
+                </div>
+                <button
+                  onClick={() => setShowFormula(true)}
+                  title="How is this score calculated?"
+                  className="text-[#484f58] hover:text-[#8b949e] text-base leading-none px-1 transition-colors"
+                >
+                  ⓘ
+                </button>
               </div>
             )}
             <button
@@ -256,6 +337,7 @@ export default function InterviewPage({ params }: { params: Promise<{ id: string
             collapsedRounds={collapsedRounds}
             toggleRound={toggleRound}
             handleRating={handleRating}
+            questionUsage={interview.questionUsage}
           />
         ))}
       </div>
@@ -282,6 +364,7 @@ export default function InterviewPage({ params }: { params: Promise<{ id: string
                     collapsedRounds={collapsedRounds}
                     toggleRound={toggleRound}
                     handleRating={handleRating}
+                    questionUsage={interview.questionUsage}
                   />
                   {isLast && (
                     <div className="mt-6 flex justify-center">

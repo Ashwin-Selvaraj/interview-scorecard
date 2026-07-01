@@ -1,0 +1,102 @@
+[
+  {
+    "question": "Tell me about a time you disagreed with a decision made by your manager or a peer. How did you raise it, and what happened?",
+    "purpose": "Tests ability to push back professionally without damaging relationships",
+    "metaTag": "Communication"
+  },
+  {
+    "question": "How do you typically communicate bad news to your team — like a missed deadline or a scope change?",
+    "purpose": "Tests transparency, ownership, and proactive communication under pressure",
+    "metaTag": "Communication"
+  },
+  {
+    "question": "How do you handle conflicting priorities between team members, where two people both think their task is most urgent?",
+    "purpose": "Tests judgment, fairness, and ability to resolve internal tension without escalating",
+    "metaTag": "Team Management"
+  },
+  {
+    "question": "Describe how you've delegated a high-stakes task. How did you choose who to give it to, and how did you follow up?",
+    "purpose": "Tests trust, delegation judgment, and follow-through without micromanaging",
+    "metaTag": "Team Management"
+  },
+  {
+    "question": "Tell me about a time there was tension or conflict within your team. What caused it, and how was it resolved?",
+    "purpose": "Tests self-awareness about team dynamics and conflict resolution maturity",
+    "metaTag": "Team Dynamics"
+  },
+  {
+    "question": "Describe a time you had to give difficult feedback to a peer or someone you don't directly manage.",
+    "purpose": "Tests courage, empathy, and ability to have hard conversations without authority",
+    "metaTag": "Team Dynamics"
+  },
+  {
+    "question": "Walk me through how you structure a project in Jira or Asana — epics, sprints/boards, labels, and priority.",
+    "purpose": "Tests practical tool fluency and how they think about project visibility",
+    "metaTag": "Tools"
+  },
+  {
+    "question": "How do you handle a situation where the backlog becomes unmanageable or priorities shift mid-sprint?",
+    "purpose": "Tests adaptability and ability to protect team focus while staying aligned with business needs",
+    "metaTag": "Tools"
+  },
+  {
+    "question": "Tell me about the most stressful deadline you've faced. How did you prioritize, and what did you cut if anything?",
+    "purpose": "Tests real decision-making under pressure — what they protect and what they sacrifice",
+    "metaTag": "Pressure"
+  },
+  {
+    "question": "Describe a time multiple urgent issues hit at once. How did you decide what to handle first?",
+    "purpose": "Tests triage thinking and composure when everything feels critical simultaneously",
+    "metaTag": "Pressure"
+  },
+  {
+    "question": "Tell me about a time you had to create a process or workflow from scratch because none existed.",
+    "purpose": "Tests initiative, comfort with ambiguity, and ability to build structure without being told to",
+    "metaTag": "Startup Fit"
+  },
+  {
+    "question": "Tell me about a time you shipped something imperfect because speed mattered more than polish. How did you decide that tradeoff?",
+    "purpose": "Tests startup mindset — bias for action, pragmatism, and knowing when good enough is enough",
+    "metaTag": "Startup Fit"
+  },
+  {
+    "question": "How comfortable are you with not having a clear long-term roadmap, and instead working in 2–4 week horizons?",
+    "purpose": "Tests cultural fit for early-stage startup pace and tolerance for strategic ambiguity",
+    "metaTag": "Startup Fit"
+  },
+  {
+    "question": "Tell me about a mistake you made that had real consequences. What did you do after realizing it?",
+    "purpose": "Tests accountability, self-awareness, and whether they own mistakes or deflect them",
+    "metaTag": "Ownership"
+  },
+  {
+    "question": "Describe a time you took ownership of something that wasn't technically your job because it needed to get done.",
+    "purpose": "Tests initiative and whether they see ownership as a mindset rather than a title",
+    "metaTag": "Ownership"
+  },
+  {
+    "question": "Tell me about a decision you had to make with incomplete data. How did you approach it?",
+    "purpose": "Tests comfort with uncertainty and structured thinking when perfect information isn't available",
+    "metaTag": "Decision-Making"
+  },
+  {
+    "question": "Tell me about a time you worked closely with a team very different from yours. What made that collaboration work — or not work?",
+    "purpose": "Tests cross-functional empathy and ability to bridge communication gaps across disciplines",
+    "metaTag": "Collaboration"
+  },
+  {
+    "question": "Tell me about a time you had to learn a completely new tool, skill, or domain quickly because the job demanded it.",
+    "purpose": "Tests learning agility and whether they take ownership of their own growth",
+    "metaTag": "Adaptability"
+  },
+  {
+    "question": "How do you stay motivated during a period where the company's direction feels unclear or things are going poorly?",
+    "purpose": "Tests resilience, internal motivation, and whether they can sustain performance without external validation",
+    "metaTag": "Resilience"
+  },
+  {
+    "question": "Tell me about a time you had to say no to additional work because you were already stretched thin. How did you communicate that?",
+    "purpose": "Tests boundary-setting, self-awareness, and professional assertiveness without appearing uncommitted",
+    "metaTag": "Resilience"
+  }
+]

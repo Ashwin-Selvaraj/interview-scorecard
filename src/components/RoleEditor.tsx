@@ -14,6 +14,7 @@ interface QuestionDraft {
 interface RoundDraft {
   id?: string;
   title: string;
+  weight: number;
   questions: QuestionDraft[];
 }
 
@@ -25,6 +26,7 @@ interface RoleEditorProps {
 }
 
 const BLANK_QUESTION: QuestionDraft = { text: "", purpose: "", metaTag: "" };
+const DEFAULT_WEIGHT = 1.0;
 
 // ── Import helpers ────────────────────────────────────────────────────────────
 
@@ -50,7 +52,7 @@ function rowsToRounds(rows: { round: string; question: string; purpose: string; 
   const map = new Map<string, RoundDraft>();
   for (const row of rows) {
     const title = row.round || "General";
-    if (!map.has(title)) map.set(title, { title, questions: [] });
+    if (!map.has(title)) map.set(title, { title, weight: DEFAULT_WEIGHT, questions: [] });
     map.get(title)!.questions.push({ text: row.question, purpose: row.purpose, metaTag: row.metaTag });
   }
   return [...map.values()];
@@ -75,7 +77,9 @@ export default function RoleEditor({ initialName = "", initialDescription = "", 
   const [name, setName] = useState(initialName);
   const [description, setDescription] = useState(initialDescription);
   const [rounds, setRounds] = useState<RoundDraft[]>(
-    initialRounds.length > 0 ? initialRounds : [{ title: "", questions: [{ ...BLANK_QUESTION }] }]
+    initialRounds.length > 0
+      ? initialRounds
+      : [{ title: "", weight: DEFAULT_WEIGHT, questions: [{ ...BLANK_QUESTION }] }]
   );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -86,7 +90,7 @@ export default function RoleEditor({ initialName = "", initialDescription = "", 
   // ── Round / Question mutations ────────────────────────────────────────────
 
   function addRound() {
-    setRounds((p) => [...p, { title: "", questions: [{ ...BLANK_QUESTION }] }]);
+    setRounds((p) => [...p, { title: "", weight: DEFAULT_WEIGHT, questions: [{ ...BLANK_QUESTION }] }]);
   }
   function removeRound(ri: number) {
     setRounds((p) => p.filter((_, i) => i !== ri));
@@ -100,6 +104,9 @@ export default function RoleEditor({ initialName = "", initialDescription = "", 
   }
   function updateRoundTitle(ri: number, title: string) {
     setRounds((p) => p.map((r, i) => i === ri ? { ...r, title } : r));
+  }
+  function updateRoundWeight(ri: number, weight: number) {
+    setRounds((p) => p.map((r, i) => i === ri ? { ...r, weight } : r));
   }
   function addQuestion(ri: number) {
     setRounds((p) => p.map((r, i) => i === ri ? { ...r, questions: [...r.questions, { ...BLANK_QUESTION }] } : r));
@@ -175,6 +182,7 @@ export default function RoleEditor({ initialName = "", initialDescription = "", 
         rounds: rounds.map((r) => ({
           ...(r.id ? { id: r.id } : {}),
           title: r.title,
+          weight: Math.max(0, Number(r.weight) || DEFAULT_WEIGHT),
           questions: r.questions
             .filter((q) => q.text.trim())
             .map((q) => ({
@@ -300,6 +308,18 @@ export default function RoleEditor({ initialName = "", initialDescription = "", 
                 placeholder="Round title…"
                 className="flex-1 bg-transparent text-white font-semibold text-sm placeholder-[#484f58] focus:outline-none"
               />
+              <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                <span className="text-xs text-[#484f58]">weight</span>
+                <input
+                  type="number"
+                  min="0"
+                  step="0.5"
+                  value={round.weight}
+                  onChange={(e) => updateRoundWeight(ri, parseFloat(e.target.value) || 0)}
+                  className="w-14 bg-[#0d1117] border border-[#30363d] rounded px-2 py-0.5 text-xs text-amber-300 text-center focus:outline-none focus:border-amber-500"
+                  title="Scoring weight for this round (higher = matters more)"
+                />
+              </div>
               <div className="flex items-center gap-1 shrink-0">
                 <button onClick={() => moveRound(ri, -1)} disabled={ri === 0} className="text-[#8b949e] hover:text-white disabled:opacity-30 text-xs px-1">▲</button>
                 <button onClick={() => moveRound(ri, 1)} disabled={ri === rounds.length - 1} className="text-[#8b949e] hover:text-white disabled:opacity-30 text-xs px-1">▼</button>
